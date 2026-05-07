@@ -3,18 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RescueOps: Command Center</title>
+    <title>RescueOps: Clean White Theme</title>
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --bg-panel: rgba(30, 41, 59, 0.85);
-            --primary: #06b6d4; /* Cyan */
-            --primary-glow: rgba(6, 182, 212, 0.5);
+            /* White Theme Palette */
+            --bg-color: #f8fafc;
+            --bg-panel: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            
+            --primary: #2563eb; /* Royal Blue */
+            --primary-light: #dbeafe;
+            --primary-glow: rgba(37, 99, 235, 0.2);
+            
             --danger: #ef4444; /* Red */
-            --danger-glow: rgba(239, 68, 68, 0.5);
-            --success: #10b981; /* Green */
-            --text-main: #e2e8f0;
-            --font-mono: 'Courier New', Courier, monospace;
+            --danger-light: #fee2e2;
+            --danger-glow: rgba(239, 68, 68, 0.2);
+            
+            --success: #10b981; /* Emerald */
+            --success-light: #d1fae5;
+            
+            --border-color: #e2e8f0;
             --font-ui: system-ui, -apple-system, sans-serif;
         }
 
@@ -22,53 +31,31 @@
 
         body {
             font-family: var(--font-ui);
-            background-color: var(--bg-dark);
+            background-color: var(--bg-color);
             color: var(--text-main);
             height: 100vh;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            /* Rain Effect Background */
-            background-image: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
-            position: relative;
-        }
-
-        /* Rain Animation */
-        .rain {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>');
-            background-size: 20px 20px;
-            animation: rainFall 0.5s linear infinite;
-            opacity: 0.3;
-            z-index: 0;
-        }
-
-        @keyframes rainFall {
-            from { background-position: 0 0; }
-            to { background-position: 0 20px; }
         }
 
         /* --- Header --- */
         header {
             background: var(--bg-panel);
-            backdrop-filter: blur(10px);
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-color);
             z-index: 10;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            height: 60px;
         }
 
         .brand {
-            font-size: 1.4rem;
             font-weight: 800;
-            letter-spacing: 1px;
+            font-size: 1.2rem;
             color: var(--primary);
-            text-transform: uppercase;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -80,287 +67,257 @@
         }
 
         .stat-badge {
-            background: rgba(0,0,0,0.3);
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-family: var(--font-mono);
+            background: var(--bg-color);
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.1);
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-
-        .stat-badge.critical { color: var(--danger); border-color: var(--danger); box-shadow: 0 0 10px var(--danger-glow); }
-        .stat-badge.safe { color: var(--success); border-color: var(--success); }
+        .stat-badge.critical { color: var(--danger); border-color: var(--danger-light); background: var(--danger-light); }
+        .stat-badge.safe { color: var(--success); border-color: var(--success-light); background: var(--success-light); }
 
         /* --- Main Layout --- */
         main {
             display: flex;
             flex: 1;
             position: relative;
-            z-index: 1;
         }
 
-        /* Sidebar */
+        /* --- Sidebar --- */
         aside {
-            width: 320px;
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 300px;
             background: var(--bg-panel);
-            backdrop-filter: blur(10px);
-            border-right: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid var(--border-color);
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            overflow-y: auto;
-            transition: transform 0.3s ease;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.05);
         }
-
-        h3 {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #94a3b8;
-            margin-bottom: 10px;
-        }
+        aside.open { transform: translateX(0); }
 
         .panel {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 15px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
         }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
+        h3 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 0.5px; }
 
         button {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: var(--text-main);
-            padding: 12px;
-            border-radius: 6px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            font-size: 0.9rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            transition: all 0.2s;
+            margin-bottom: 10px;
         }
 
-        button:hover { background: rgba(255,255,255,0.1); }
         button:active { transform: scale(0.98); }
 
-        button.primary { background: var(--primary); color: #000; border: none; }
-        button.primary:hover { background: #22d3ee; box-shadow: 0 0 15px var(--primary-glow); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3); }
+        .btn-primary:hover { background: #1d4ed8; }
         
-        button.danger { background: var(--danger); color: white; border: none; }
-        button.danger:hover { background: #f87171; box-shadow: 0 0 15px var(--danger-glow); }
+        .btn-danger { background: var(--danger); color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); }
+        .btn-danger:hover { background: #dc2626; }
 
-        button:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+        .btn-outline { background: transparent; border: 2px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* Log Terminal */
-        .terminal {
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 4px;
-            height: 200px;
-            overflow-y: auto;
-            padding: 10px;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: #33ff00;
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
         }
-        .terminal p { margin-bottom: 4px; border-bottom: 1px solid #111; }
-        .terminal span.time { color: #666; margin-right: 5px; }
+        .progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.5s; }
 
-        /* Map Area */
+        .terminal {
+            background: #1e293b; /* Dark terminal for contrast */
+            border-radius: 8px;
+            height: 180px;
+            overflow-y: auto;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #38bdf8;
+            border: 1px solid #334155;
+        }
+        .terminal p { margin-bottom: 5px; border-bottom: 1px solid #334155; }
+        .terminal span.time { color: #64748b; margin-right: 5px; }
+
+        /* --- Map Area --- */
         #map-container {
             flex: 1;
             position: relative;
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            background: #f1f5f9;
             overflow: hidden;
-            cursor: crosshair;
+            touch-action: none;
         }
 
-        /* Grid Overlay */
         .grid {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* Map Elements */
         .entity {
             position: absolute;
             transform: translate(-50%, -50%);
-            transition: top 0.1s linear, left 0.1s linear; /* Smooth drag */
             z-index: 10;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 28px;
+            font-size: 30px;
         }
 
-        /* Buildings */
         .building {
-            width: 80px;
-            height: 80px;
-            background: #475569;
-            border: 2px solid #334155;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            width: 80px; height: 80px;
+            background: #cbd5e1;
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             z-index: 2;
-            border-radius: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 30px;
-            color: #94a3b8;
+            font-size: 32px;
+            color: #64748b;
         }
-        .building.damaged { background: #334155; border-color: #1e293b; }
 
-        /* Victims */
         .victim {
-            width: 36px;
-            height: 36px;
-            background: rgba(255,255,255,0.9);
+            width: 40px; height: 40px;
+            background: white;
             border: 3px solid var(--danger);
             border-radius: 50%;
-            box-shadow: 0 0 15px var(--danger-glow);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
             z-index: 5;
             cursor: pointer;
-            animation: pulse 2s infinite;
+            transition: transform 0.2s;
         }
-        .victim::after { content: "🆘"; font-size: 16px; }
+        .victim::after { content: "🆘"; font-size: 18px; }
         .victim.rescued { border-color: var(--success); background: var(--success); }
         .victim.rescued::after { content: "✅"; }
+        .victim:hover { transform: scale(1.1); }
 
-        /* Rescuer Drone */
         .drone {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             background: var(--primary);
             border-radius: 50%;
             box-shadow: 0 0 20px var(--primary-glow);
             z-index: 20;
             cursor: grab;
+            transition: box-shadow 0.2s;
         }
+        .drone:active { cursor: grabbing; box-shadow: 0 0 30px var(--primary-glow); }
         .drone::after { content: "🛸"; font-size: 24px; }
-        .drone:active { cursor: grabbing; }
 
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: #333;
-            border-radius: 3px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-        .progress-bar {
-            height: 100%;
-            background: var(--success);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        /* Tooltip */
+        /* --- Overlays --- */
         #tooltip {
             position: absolute;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid var(--primary);
-            color: white;
+            background: white;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             padding: 8px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s;
             z-index: 100;
             white-space: nowrap;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        /* Toast */
         #toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--bg-panel);
-            border-left: 4px solid var(--primary);
-            padding: 15px 25px;
-            border-radius: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-main);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-weight: bold;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+            width: max-content;
+            max-width: 90%;
+            text-align: center;
         }
-        #toast.show { transform: translateY(0); opacity: 1; }
+        #toast.show { transform: translateX(-50%) translateY(0); }
 
-        /* Mobile Toggle */
-        .menu-toggle { display: none; }
-
-        @media (max-width: 768px) {
-            aside { position: absolute; left: 0; top: 0; bottom: 0; transform: translateX(-100%); z-index: 50; }
-            aside.open { transform: translateX(0); }
-            .menu-toggle { display: block; background: none; border: none; color: white; font-size: 1.5rem; }
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="rain"></div>
-
     <header>
         <div class="brand">
-            <button class="menu-toggle" id="menu-btn">☰</button>
-            <span>RescueOps</span> <span style="font-size:0.8em; opacity:0.7">v2.0</span>
+            <button class="menu-btn" id="menu-btn">☰</button>
+            <span>RescueOps</span>
         </div>
         <div class="status-bar">
-            <div class="stat-badge critical">⚠️ <span id="critical-count">0</span> Trapped</div>
-            <div class="stat-badge safe">✅ <span id="saved-count">0</span> Rescued</div>
-            <div class="stat-badge" style="color:var(--primary)">🔋 <span id="battery-level">100%</span></div>
+            <div class="stat-badge critical">⚠️ <span id="critical-count">0</span></div>
+            <div class="stat-badge safe">✅ <span id="saved-count">0</span></div>
         </div>
     </header>
 
     <main>
         <aside id="sidebar">
             <div class="panel">
-                <h3>Drone Controls</h3>
-                <div class="btn-grid">
-                    <button id="btn-scan" class="primary">
-                        <span>📡</span> Scan Area
-                    </button>
-                    <button id="btn-auto" class="primary">
-                        <span>🤖</span> Auto-Pilot
-                    </button>
-                </div>
+                <h3>Controls</h3>
+                <button id="btn-scan" class="btn-primary">
+                    <span>📡</span> Scan Area
+                </button>
+                <button id="btn-auto" class="btn-primary">
+                    <span>🤖</span> Auto-Pilot
+                </button>
                 <div class="progress-container">
                     <div class="progress-bar" id="mission-progress"></div>
                 </div>
-                <div style="text-align:right; font-size:0.8rem; color:#888; margin-top:5px;">
+                <div style="text-align:right; font-size:0.7rem; color:var(--text-muted); margin-top:5px;">
                     Mission: <span id="mission-text">Idle</span>
                 </div>
             </div>
 
             <div class="panel">
-                <h3>Map Tools</h3>
-                <button id="btn-reset">
-                    <span>🔄</span> Reset Simulation
+                <h3>Tools</h3>
+                <button id="btn-reset" class="btn-outline">
+                    <span>🔄</span> Reset
                 </button>
             </div>
 
             <div class="terminal" id="terminal">
-                <p><span class="time">00:00</span>System initialized...</p>
-                <p><span class="time">00:00</span>Waiting for command...</p>
+                <p><span class="time">00:00</span>System Ready...</p>
             </div>
         </aside>
 
@@ -374,7 +331,7 @@
     <div id="toast">Message</div>
 
     <script>
-        // --- State Management ---
+        // --- State ---
         const state = {
             victims: [],
             rescuers: [],
@@ -385,54 +342,49 @@
             isScanning: false,
             isAutoPilot: false,
             isDragging: false,
-            lastMousePos: { x: 0, y: 0 }
+            lastTouch: { x: 0, y: 0 }
         };
 
-        // --- DOM Elements ---
+        // --- DOM ---
         const mapContainer = document.getElementById('map-container');
         const terminal = document.getElementById('terminal');
         const toastEl = document.getElementById('toast');
         const tooltip = document.getElementById('tooltip');
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menu-btn');
         
-        // Stats
         const elCritical = document.getElementById('critical-count');
         const elSaved = document.getElementById('saved-count');
-        const elBattery = document.getElementById('battery-level');
         const elProgress = document.getElementById('mission-progress');
         const elMissionText = document.getElementById('mission-text');
 
-        // Buttons
         const btnScan = document.getElementById('btn-scan');
         const btnAuto = document.getElementById('btn-auto');
         const btnReset = document.getElementById('btn-reset');
-        const menuBtn = document.getElementById('menu-btn');
-        const sidebar = document.getElementById('sidebar');
 
-        // --- Initialization ---
+        // --- Init ---
         function init() {
             generateMap();
             updateStats();
-            addLog("System Online. Weather conditions: STORM.");
-            addLog("Waiting for drone deployment.");
+            addLog("System Online. Weather: Clear.");
         }
 
-        // --- Map Generation ---
+        // --- Map Gen ---
         function generateMap() {
-            // Cleanup
             document.querySelectorAll('.entity').forEach(el => el.remove());
             state.victims = [];
             state.buildings = [];
             state.battery = 100;
             state.isAutoPilot = false;
             btnAuto.innerHTML = '<span>🤖</span> Auto-Pilot';
-            btnAuto.classList.remove('danger'); // Reset style
+            btnAuto.classList.remove('btn-danger');
             elMissionText.innerText = "Idle";
             elProgress.style.width = '0%';
 
             const w = mapContainer.clientWidth;
             const h = mapContainer.clientHeight;
 
-            // 1. Buildings
+            // Buildings
             for(let i=0; i<5; i++) {
                 const b = document.createElement('div');
                 b.className = 'entity building damaged';
@@ -445,28 +397,24 @@
                 state.buildings.push({ id: i, x, y, element: b });
             }
 
-            // 2. Victims
+            // Victims
             for(let i=0; i<6; i++) {
                 const v = document.createElement('div');
                 v.className = 'entity victim';
                 v.dataset.id = i;
                 v.style.display = 'none';
-                
-                // Place inside a random building
                 const building = state.buildings[Math.floor(Math.random() * state.buildings.length)];
                 const ox = (Math.random() - 0.5) * 50;
                 const oy = (Math.random() - 0.5) * 50;
-                
                 v.style.left = (building.x + ox) + 'px';
                 v.style.top = (building.y + oy) + 'px';
-                
                 v.addEventListener('mouseenter', (e) => showTooltip(e, i));
                 v.addEventListener('mouseleave', hideTooltip);
                 mapContainer.appendChild(v);
                 state.victims.push({ id: i, x: building.x + ox, y: building.y + oy, element: v, rescued: false });
             }
 
-            // 3. Rescuer Drone (Starts hidden or at edge)
+            // Drone
             const drone = document.createElement('div');
             drone.className = 'entity drone';
             drone.id = 'drone';
@@ -474,63 +422,53 @@
             drone.style.left = '50%';
             drone.style.top = '50%';
             
-            // Drag Events
+            // Mouse Drag
             drone.addEventListener('mousedown', startDrag);
-            drone.addEventListener('mouseenter', (e) => showTooltip(e, 'drone'));
-            drone.addEventListener('mouseleave', hideTooltip);
+            // Touch Drag
+            drone.addEventListener('touchstart', startDrag, {passive: false});
             
             mapContainer.appendChild(drone);
             state.rescuers.push({ id: 'drone', x: w/2, y: h/2, element: drone });
         }
 
-        // --- Interaction Logic ---
+        // --- Controls ---
 
         // Scan
         btnScan.addEventListener('click', () => {
             if(state.isScanning || state.isAutoPilot) return;
             state.isScanning = true;
-            
             btnScan.disabled = true;
             btnScan.innerHTML = '<span>📡</span> Scanning...';
-            mapContainer.classList.add('scanning');
-            addLog("Initiating deep scan...");
-
+            
             setTimeout(() => {
                 state.victims.forEach(v => {
                     v.element.style.display = 'flex';
                     v.element.style.transform = 'translate(-50%, -50%) scale(0)';
                     setTimeout(() => v.element.style.transform = 'translate(-50%, -50%) scale(1)', 50);
                 });
-                
                 state.rescuers[0].element.style.display = 'flex';
-                mapContainer.classList.remove('scanning');
                 state.isScanning = false;
-                
                 btnScan.disabled = false;
                 btnScan.innerHTML = '<span>📡</span> Scan Area';
-                
                 updateStats();
-                addLog("Scan Complete. 6 Victims Detected.");
-                showToast("Scan Complete. Targets Acquired.", "success");
+                addLog("Scan Complete. 6 Targets Detected.");
+                showToast("Scan Complete", "success");
             }, 1500);
         });
 
-        // Auto Pilot (A* Pathfinding Simplified)
+        // Auto Pilot
         btnAuto.addEventListener('click', () => {
             if(state.isScanning || state.isAutoPilot) return;
-            
-            // Toggle
             state.isAutoPilot = !state.isAutoPilot;
-            
             if(state.isAutoPilot) {
                 btnAuto.innerHTML = '<span>🛑</span> Stop';
-                btnAuto.classList.add('danger');
-                elMissionText.innerText = "Auto-Rescue Mode Active";
-                addLog("Auto-Pilot engaged. Calculating shortest path...");
+                btnAuto.classList.add('btn-danger');
+                elMissionText.innerText = "Auto-Rescue";
+                addLog("Auto-Pilot engaged.");
                 autoPilotLoop();
             } else {
                 btnAuto.innerHTML = '<span>🤖</span> Auto-Pilot';
-                btnAuto.classList.remove('danger');
+                btnAuto.classList.remove('btn-danger');
                 elMissionText.innerText = "Idle";
                 addLog("Auto-Pilot disengaged.");
             }
@@ -538,19 +476,14 @@
 
         function autoPilotLoop() {
             if(!state.isAutoPilot) return;
-
             const drone = state.rescuers[0];
-            // Find nearest
             let nearest = null;
             let minDist = Infinity;
 
             state.victims.forEach(v => {
                 if(v.rescued) return;
                 const d = Math.hypot(v.x - drone.x, v.y - drone.y);
-                if(d < minDist) {
-                    minDist = d;
-                    nearest = v;
-                }
+                if(d < minDist) { minDist = d; nearest = v; }
             });
 
             if(!nearest) {
@@ -562,29 +495,42 @@
                 return;
             }
 
-            // Move
             animateMovement(drone.element, nearest.x, nearest.y, () => {
                 rescueVictim(nearest);
                 if(state.isAutoPilot) autoPilotLoop();
             });
         }
 
-        // Manual Drag
+        // Dragging (Mouse & Touch)
         function startDrag(e) {
             if(state.isAutoPilot) return;
+            e.preventDefault(); // Prevent scrolling
             state.isDragging = true;
-            state.lastMousePos = { x: e.clientX, y: e.clientY };
+            
+            // Get X/Y
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            state.lastTouch = { x: clientX, y: clientY };
+            
             document.addEventListener('mousemove', onDrag);
             document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchmove', onDrag, {passive: false});
+            document.addEventListener('touchend', stopDrag);
         }
 
         function onDrag(e) {
             if(!state.isDragging) return;
-            const rect = mapContainer.getBoundingClientRect();
-            let x = e.clientX - rect.left;
-            let y = e.clientY - rect.top;
+            e.preventDefault();
 
-            // Constrain to map
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const rect = mapContainer.getBoundingClientRect();
+            let x = clientX - rect.left;
+            let y = clientY - rect.top;
+
+            // Constrain
             x = Math.max(25, Math.min(x, rect.width - 25));
             y = Math.max(25, Math.min(y, rect.height - 25));
 
@@ -599,54 +545,40 @@
             state.isDragging = false;
             document.removeEventListener('mousemove', onDrag);
             document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', onDrag);
+            document.removeEventListener('touchend', stopDrag);
         }
 
-        // Rescue Logic
+        // --- Logic ---
         function rescueVictim(v) {
             v.rescued = true;
             v.element.innerHTML = "✅";
             v.element.style.borderColor = "var(--success)";
-            v.element.style.boxShadow = "0 0 15px rgba(16, 185, 129, 0.5)";
-            
-            // Remove after delay
-            setTimeout(() => {
-                v.element.style.opacity = '0';
-                setTimeout(() => v.element.remove(), 500);
-            }, 1000);
-
+            v.element.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.3)";
+            setTimeout(() => { v.element.style.opacity = '0'; setTimeout(() => v.element.remove(), 500); }, 1000);
             state.savedCount++;
             updateStats();
-            addLog(`Victim ${v.id} rescued successfully.`);
-            
-            // Battery drain
+            addLog(`Victim ${v.id} rescued.`);
             state.battery = Math.max(0, state.battery - 5);
             updateStats();
         }
 
-        // --- Helpers ---
         function animateMovement(element, tx, ty, callback) {
             const sx = parseFloat(element.style.left);
             const sy = parseFloat(element.style.top);
             const startTime = performance.now();
-            const duration = 600; // Faster travel
+            const duration = 600;
 
             function step(time) {
                 const elapsed = time - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                // Ease out
                 const ease = 1 - Math.pow(1 - progress, 3);
-
                 const curX = sx + (tx - sx) * ease;
                 const curY = sy + (ty - sy) * ease;
-
                 element.style.left = curX + 'px';
                 element.style.top = curY + 'px';
-
-                if(progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    if(callback) callback();
-                }
+                if(progress < 1) requestAnimationFrame(step);
+                else if(callback) callback();
             }
             requestAnimationFrame(step);
         }
@@ -655,52 +587,40 @@
             state.criticalCount = state.victims.filter(v => !v.rescued).length;
             elCritical.innerText = state.criticalCount;
             elSaved.innerText = state.savedCount;
-            elBattery.innerText = state.battery + '%';
             
-            // Progress Bar
-            const total = 6;
-            const pct = (state.savedCount / total) * 100;
+            const pct = (state.savedCount / 6) * 100;
             elProgress.style.width = pct + '%';
-
-            if(state.battery < 20) elBattery.style.color = 'var(--danger)';
-            else elBattery.style.color = 'var(--primary)';
         }
 
         function addLog(msg) {
             const now = new Date();
-            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
             const p = document.createElement('p');
             p.innerHTML = `<span class="time">${timeStr}</span> ${msg}`;
             terminal.appendChild(p);
             terminal.scrollTop = terminal.scrollHeight;
         }
 
-        function showToast(msg, type = 'normal') {
+        function showToast(msg) {
             toastEl.innerText = msg;
-            toastEl.style.borderLeftColor = type === 'success' ? 'var(--success)' : 'var(--primary)';
             toastEl.classList.add('show');
             setTimeout(() => toastEl.classList.remove('show'), 3000);
         }
 
         function showTooltip(e, id) {
-            let text = "";
-            if (id === 'drone') {
-                text = `Drone Status: ${state.isAutoPilot ? 'AUTOPILOT' : 'MANUAL'} | Battery: ${state.battery}%`;
-            } else {
-                const v = state.victims[id];
-                text = v.rescued ? "Victim: Safe" : "Victim: Trapped";
-            }
+            let text = id === 'drone' ? `Battery: ${state.battery}%` : "Victim: Trapped";
             tooltip.innerText = text;
             tooltip.style.left = (e.clientX + 15) + 'px';
             tooltip.style.top = (e.clientY + 15) + 'px';
             tooltip.style.opacity = 1;
         }
+        function hideTooltip() { tooltip.style.opacity = 0; }
 
-        function hideTooltip() {
-            tooltip.style.opacity = 0;
-        }
+        // Mobile Menu
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
 
-        // Reset
         btnReset.addEventListener('click', () => {
             if(confirm("Reset simulation?")) {
                 generateMap();
@@ -709,14 +629,7 @@
             }
         });
 
-        // Mobile Menu
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
-
-        // Run
         init();
-
     </script>
 </body>
 </html>
